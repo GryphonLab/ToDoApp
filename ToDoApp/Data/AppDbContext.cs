@@ -65,5 +65,10 @@ namespace ToDoApp.Data
                 throw new Exception("Error in deleting of the task");
             }
         }
+
+        public static void GetDisplayData()
+        {
+
+        }
     }
 }

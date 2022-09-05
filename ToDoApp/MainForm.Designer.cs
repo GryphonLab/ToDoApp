@@ -37,12 +37,11 @@ namespace ToDoApp
             this.btnDeleteSelected = new System.Windows.Forms.Button();
             this.btnAddTask = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.rbShowAll = new System.Windows.Forms.RadioButton();
-            this.btnShowRange = new System.Windows.Forms.Button();
+            this.rbShowWeek = new System.Windows.Forms.RadioButton();
             this.label2 = new System.Windows.Forms.Label();
-            this.dtpFinallDate = new System.Windows.Forms.DateTimePicker();
+            this.dtpEndDate = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
-            this.dtpInitialDate = new System.Windows.Forms.DateTimePicker();
+            this.dtpStartDate = new System.Windows.Forms.DateTimePicker();
             this.rbShowSelected = new System.Windows.Forms.RadioButton();
             this.rbShowTomorrow = new System.Windows.Forms.RadioButton();
             this.rbShowToday = new System.Windows.Forms.RadioButton();
@@ -71,7 +70,6 @@ namespace ToDoApp
             this.dgTable.ReadOnly = true;
             this.dgTable.Size = new System.Drawing.Size(505, 369);
             this.dgTable.TabIndex = 0;
-            this.dgTable.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgTable_CellContentClick);
             // 
             // Id
             // 
@@ -130,43 +128,33 @@ namespace ToDoApp
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.rbShowAll);
-            this.groupBox1.Controls.Add(this.btnShowRange);
+            this.groupBox1.Controls.Add(this.rbShowWeek);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.dtpFinallDate);
+            this.groupBox1.Controls.Add(this.dtpEndDate);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.dtpInitialDate);
+            this.groupBox1.Controls.Add(this.dtpStartDate);
             this.groupBox1.Controls.Add(this.rbShowSelected);
             this.groupBox1.Controls.Add(this.rbShowTomorrow);
             this.groupBox1.Controls.Add(this.rbShowToday);
             this.groupBox1.Location = new System.Drawing.Point(12, 65);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(193, 213);
+            this.groupBox1.Size = new System.Drawing.Size(193, 177);
             this.groupBox1.TabIndex = 3;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Отобразить задачи";
             // 
-            // rbShowAll
+            // rbShowWeek
             // 
-            this.rbShowAll.AutoSize = true;
-            this.rbShowAll.Checked = true;
-            this.rbShowAll.Location = new System.Drawing.Point(6, 19);
-            this.rbShowAll.Name = "rbShowAll";
-            this.rbShowAll.Size = new System.Drawing.Size(44, 17);
-            this.rbShowAll.TabIndex = 8;
-            this.rbShowAll.TabStop = true;
-            this.rbShowAll.Text = "Все";
-            this.rbShowAll.UseVisualStyleBackColor = true;
-            // 
-            // btnShowRange
-            // 
-            this.btnShowRange.Location = new System.Drawing.Point(9, 184);
-            this.btnShowRange.Name = "btnShowRange";
-            this.btnShowRange.Size = new System.Drawing.Size(171, 23);
-            this.btnShowRange.TabIndex = 7;
-            this.btnShowRange.Text = "Отобразить";
-            this.btnShowRange.UseVisualStyleBackColor = true;
-            this.btnShowRange.Click += new System.EventHandler(this.btnShowRange_Click);
+            this.rbShowWeek.AutoSize = true;
+            this.rbShowWeek.Checked = true;
+            this.rbShowWeek.Location = new System.Drawing.Point(6, 19);
+            this.rbShowWeek.Name = "rbShowWeek";
+            this.rbShowWeek.Size = new System.Drawing.Size(80, 17);
+            this.rbShowWeek.TabIndex = 8;
+            this.rbShowWeek.TabStop = true;
+            this.rbShowWeek.Text = "На неделю";
+            this.rbShowWeek.UseVisualStyleBackColor = true;
+            this.rbShowWeek.CheckedChanged += new System.EventHandler(this.rbShowWeek_CheckedChanged);
             // 
             // label2
             // 
@@ -177,12 +165,13 @@ namespace ToDoApp
             this.label2.TabIndex = 6;
             this.label2.Text = "по";
             // 
-            // dtpFinallDate
+            // dtpEndDate
             // 
-            this.dtpFinallDate.Location = new System.Drawing.Point(30, 142);
-            this.dtpFinallDate.Name = "dtpFinallDate";
-            this.dtpFinallDate.Size = new System.Drawing.Size(150, 20);
-            this.dtpFinallDate.TabIndex = 5;
+            this.dtpEndDate.Location = new System.Drawing.Point(30, 142);
+            this.dtpEndDate.Name = "dtpEndDate";
+            this.dtpEndDate.Size = new System.Drawing.Size(150, 20);
+            this.dtpEndDate.TabIndex = 5;
+            this.dtpEndDate.ValueChanged += new System.EventHandler(this.dtpEndDate_ValueChanged);
             // 
             // label1
             // 
@@ -193,12 +182,13 @@ namespace ToDoApp
             this.label1.TabIndex = 4;
             this.label1.Text = "с";
             // 
-            // dtpInitialDate
+            // dtpStartDate
             // 
-            this.dtpInitialDate.Location = new System.Drawing.Point(30, 116);
-            this.dtpInitialDate.Name = "dtpInitialDate";
-            this.dtpInitialDate.Size = new System.Drawing.Size(150, 20);
-            this.dtpInitialDate.TabIndex = 3;
+            this.dtpStartDate.Location = new System.Drawing.Point(30, 116);
+            this.dtpStartDate.Name = "dtpStartDate";
+            this.dtpStartDate.Size = new System.Drawing.Size(150, 20);
+            this.dtpStartDate.TabIndex = 3;
+            this.dtpStartDate.ValueChanged += new System.EventHandler(this.dtpStartDate_ValueChanged);
             // 
             // rbShowSelected
             // 
@@ -209,6 +199,7 @@ namespace ToDoApp
             this.rbShowSelected.TabIndex = 2;
             this.rbShowSelected.Text = "Выбранный промежуток";
             this.rbShowSelected.UseVisualStyleBackColor = true;
+            this.rbShowSelected.CheckedChanged += new System.EventHandler(this.rbShowSelected_CheckedChanged);
             // 
             // rbShowTomorrow
             // 
@@ -219,6 +210,7 @@ namespace ToDoApp
             this.rbShowTomorrow.TabIndex = 1;
             this.rbShowTomorrow.Text = "На завтра";
             this.rbShowTomorrow.UseVisualStyleBackColor = true;
+            this.rbShowTomorrow.CheckedChanged += new System.EventHandler(this.rbShowTomorrow_CheckedChanged);
             // 
             // rbShowToday
             // 
@@ -229,11 +221,12 @@ namespace ToDoApp
             this.rbShowToday.TabIndex = 0;
             this.rbShowToday.Text = "На сегодня";
             this.rbShowToday.UseVisualStyleBackColor = true;
+            this.rbShowToday.CheckedChanged += new System.EventHandler(this.rbShowToday_CheckedChanged);
             // 
             // cbNotifyUser
             // 
             this.cbNotifyUser.AutoSize = true;
-            this.cbNotifyUser.Location = new System.Drawing.Point(12, 284);
+            this.cbNotifyUser.Location = new System.Drawing.Point(30, 248);
             this.cbNotifyUser.Name = "cbNotifyUser";
             this.cbNotifyUser.Size = new System.Drawing.Size(146, 17);
             this.cbNotifyUser.TabIndex = 4;
@@ -255,6 +248,7 @@ namespace ToDoApp
             this.MinimumSize = new System.Drawing.Size(800, 350);
             this.Name = "MainForm";
             this.Text = "ToDo Application";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgTable)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -271,14 +265,13 @@ namespace ToDoApp
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.RadioButton rbShowToday;
         private System.Windows.Forms.RadioButton rbShowTomorrow;
-        private System.Windows.Forms.Button btnShowRange;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.DateTimePicker dtpFinallDate;
+        private System.Windows.Forms.DateTimePicker dtpEndDate;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DateTimePicker dtpInitialDate;
+        private System.Windows.Forms.DateTimePicker dtpStartDate;
         private System.Windows.Forms.RadioButton rbShowSelected;
         private System.Windows.Forms.CheckBox cbNotifyUser;
-        private System.Windows.Forms.RadioButton rbShowAll;
+        private System.Windows.Forms.RadioButton rbShowWeek;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn StartDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;

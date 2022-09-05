@@ -49,7 +49,7 @@ namespace ToDoApp
                 {
                     MessageBox.Show(ex.Message, "Ошибка добавления задачи", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                
+                //this.MainForm.Update
                 this.Close();
             }   
         }
