@@ -30,10 +30,6 @@ namespace ToDoApp
         private void InitializeComponent()
         {
             this.dgTable = new System.Windows.Forms.DataGridView();
-            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.StartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.IsDone = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.btnDeleteSelected = new System.Windows.Forms.Button();
             this.btnAddTask = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -46,6 +42,12 @@ namespace ToDoApp
             this.rbShowTomorrow = new System.Windows.Forms.RadioButton();
             this.rbShowToday = new System.Windows.Forms.RadioButton();
             this.cbNotifyUser = new System.Windows.Forms.CheckBox();
+            this.lbDateTimeNow = new System.Windows.Forms.Label();
+            this.Id = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.StartDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Description = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.IsDone = new System.Windows.Forms.DataGridViewCheckBoxColumn();
+            this.IsNotified = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgTable)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -64,44 +66,13 @@ namespace ToDoApp
             this.Id,
             this.StartDate,
             this.Description,
-            this.IsDone});
+            this.IsDone,
+            this.IsNotified});
             this.dgTable.Location = new System.Drawing.Point(253, 65);
             this.dgTable.Name = "dgTable";
             this.dgTable.ReadOnly = true;
             this.dgTable.Size = new System.Drawing.Size(505, 369);
             this.dgTable.TabIndex = 0;
-            // 
-            // Id
-            // 
-            this.Id.DataPropertyName = "Id";
-            this.Id.HeaderText = "Id";
-            this.Id.Name = "Id";
-            this.Id.ReadOnly = true;
-            this.Id.Visible = false;
-            // 
-            // StartDate
-            // 
-            this.StartDate.DataPropertyName = "StartDate";
-            this.StartDate.HeaderText = "Дата планирования";
-            this.StartDate.Name = "StartDate";
-            this.StartDate.ReadOnly = true;
-            this.StartDate.Width = 150;
-            // 
-            // Description
-            // 
-            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
-            this.Description.DataPropertyName = "Description";
-            this.Description.HeaderText = "Описание";
-            this.Description.Name = "Description";
-            this.Description.ReadOnly = true;
-            // 
-            // IsDone
-            // 
-            this.IsDone.DataPropertyName = "IsDone";
-            this.IsDone.HeaderText = "Выполнено";
-            this.IsDone.Name = "IsDone";
-            this.IsDone.ReadOnly = true;
-            this.IsDone.Width = 70;
             // 
             // btnDeleteSelected
             // 
@@ -234,11 +205,62 @@ namespace ToDoApp
             this.cbNotifyUser.UseVisualStyleBackColor = true;
             this.cbNotifyUser.CheckedChanged += new System.EventHandler(this.cbNotifyUser_CheckedChanged);
             // 
+            // lbDateTimeNow
+            // 
+            this.lbDateTimeNow.AutoSize = true;
+            this.lbDateTimeNow.Font = new System.Drawing.Font("Arial", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.lbDateTimeNow.Location = new System.Drawing.Point(15, 16);
+            this.lbDateTimeNow.Name = "lbDateTimeNow";
+            this.lbDateTimeNow.Size = new System.Drawing.Size(283, 34);
+            this.lbDateTimeNow.TabIndex = 5;
+            this.lbDateTimeNow.Text = "06.09.2022 10:23:46";
+            // 
+            // Id
+            // 
+            this.Id.DataPropertyName = "Id";
+            this.Id.HeaderText = "Id";
+            this.Id.Name = "Id";
+            this.Id.ReadOnly = true;
+            this.Id.Visible = false;
+            // 
+            // StartDate
+            // 
+            this.StartDate.DataPropertyName = "StartDate";
+            this.StartDate.HeaderText = "Дата";
+            this.StartDate.Name = "StartDate";
+            this.StartDate.ReadOnly = true;
+            // 
+            // Description
+            // 
+            this.Description.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.Fill;
+            this.Description.DataPropertyName = "Description";
+            this.Description.HeaderText = "Описание";
+            this.Description.Name = "Description";
+            this.Description.ReadOnly = true;
+            // 
+            // IsDone
+            // 
+            this.IsDone.DataPropertyName = "IsDone";
+            this.IsDone.HeaderText = "Выполнено";
+            this.IsDone.Name = "IsDone";
+            this.IsDone.ReadOnly = true;
+            this.IsDone.Visible = false;
+            this.IsDone.Width = 70;
+            // 
+            // IsNotified
+            // 
+            this.IsNotified.DataPropertyName = "IsNotified";
+            this.IsNotified.HeaderText = "Уведомлено";
+            this.IsNotified.Name = "IsNotified";
+            this.IsNotified.ReadOnly = true;
+            this.IsNotified.Width = 80;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(784, 461);
+            this.Controls.Add(this.lbDateTimeNow);
             this.Controls.Add(this.cbNotifyUser);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnAddTask);
@@ -272,10 +294,12 @@ namespace ToDoApp
         private System.Windows.Forms.RadioButton rbShowSelected;
         private System.Windows.Forms.CheckBox cbNotifyUser;
         private System.Windows.Forms.RadioButton rbShowWeek;
+        private System.Windows.Forms.Label lbDateTimeNow;
         private System.Windows.Forms.DataGridViewTextBoxColumn Id;
         private System.Windows.Forms.DataGridViewTextBoxColumn StartDate;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.DataGridViewCheckBoxColumn IsDone;
+        private System.Windows.Forms.DataGridViewCheckBoxColumn IsNotified;
     }
 }
 

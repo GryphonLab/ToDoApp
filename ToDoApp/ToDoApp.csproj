@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="Data\Configuration.cs" />
     <Compile Include="Data\AppDbContext.cs" />
+    <Compile Include="Data\DbAccess.cs" />
     <Compile Include="Data\Tables\Task.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

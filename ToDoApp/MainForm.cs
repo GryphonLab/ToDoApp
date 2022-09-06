@@ -16,34 +16,43 @@ namespace ToDoApp
     public partial class MainForm : Form
     {
         #region Global Variables
-        System.Timers.Timer reminderTimer;
-        const int timerDelayInMs = 60000; //1 min
+        readonly System.Timers.Timer reminderTimer;
+        readonly System.Timers.Timer updateCurrentTimeTimer;
+        const int timerDelayInMs = 60000; //1 min update time for reminder notification
+
+        delegate void UpdateDTLabel(Label lbl, string value);
+        delegate void UpdateDGView();
         #endregion
 
 
         public MainForm()
         {
             InitializeComponent();
-
+            
+            //5 minutes reminder timer
             reminderTimer = new System.Timers.Timer();
             reminderTimer.Interval = timerDelayInMs;
-            reminderTimer.Elapsed += OnTimerTick;
+            reminderTimer.Elapsed += ReminderTick;
 
+            //Timer to update a current date and time on main form 
+            updateCurrentTimeTimer = new System.Timers.Timer();
+            updateCurrentTimeTimer.Interval = 1000;
+            updateCurrentTimeTimer.Elapsed += new System.Timers.ElapsedEventHandler(UpdateCurrentTimeTick);
+            updateCurrentTimeTimer.Start();
+
+            //Preparing form elements
+            lbDateTimeNow.Text = DateTime.Now.ToString();
             dtpEndDate.Value = DateTime.Now.AddDays(1);
 
         }
         #region Add New Task Button
         private void btnAddTask_Click(object sender, EventArgs e)
         {
-            Form AddForm = new NewTaskForm();
+            Form AddForm = new NewTaskForm(this);
             AddForm.Show();
         }
         #endregion
 
-        private void btnShowRange_Click(object sender, EventArgs e)
-        {
-            UpdateDataGrid();
-        }
 
         #region Delete Selected Task Button
         private void btnDeleteSelected_Click(object sender, EventArgs e)
@@ -58,7 +67,7 @@ namespace ToDoApp
 
                         try
                         {
-                            AppDbContext.DeleteTask(dgId);
+                            DbAccess.DeleteTask(dgId);
                             MessageBox.Show("Задача удалена!", "Удаление задачи", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         }
                         catch (Exception ex)
@@ -83,6 +92,7 @@ namespace ToDoApp
             if (!reminderTimer.Enabled)
             {
                 reminderTimer.Start();
+                ReminderTick(null, null);
             }
             else
             {
@@ -92,35 +102,62 @@ namespace ToDoApp
         #endregion
 
         #region Timer on check future tasks
-        private void OnTimerTick(object o, System.Timers.ElapsedEventArgs e)
+        private void ReminderTick(object o, System.Timers.ElapsedEventArgs e)
         {
 
             var startDate = DateTime.Now;
             var endDate = startDate.AddMinutes(5);
 
-
-
-            using (var cont = new Data.AppDbContext())
+            try
             {
-                //Data.Tables.Task tsk = cont.Tasks.Find(3);
-
-                //var filtereDdata 
-                var tasks = cont.Tasks.Where(task => task.StartDate >= startDate && task.StartDate < endDate);
-                //tasks += tasks.OrderBy(task => task.StartDate);
-
-                //var tasks = cont.Tasks; //Show all values
-                tasks = tasks.OrderBy(task => task.StartDate); //Sorting all tasks by date before showing it in Data Grid
-                foreach (var task in tasks)
-                    new ToastContentBuilder()
-                        .AddText("Через пять минут")
-                        .AddText(task.Description)
-                        .Show();
+                var tasksToBeReminded = DbAccess.GetDisplayData(startDate, endDate);
+                foreach (var task in tasksToBeReminded)
+                {
+                    if (!task.IsNotified)
+                    {
+                        new ToastContentBuilder()
+                       .AddText("Через пять минут")
+                       .AddText(task.Description)
+                       .Show();
+                        DbAccess.SetIsNotifiedFlag((int)task.Id, true);
+                        //Updating the DGV since we have made some edits in the DB
+                        UpdateDGView upd = UpdateDataGrid;
+                        if (dgTable.InvokeRequired)
+                            Invoke(upd);
+                    }
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
-
         #endregion
 
-        private void UpdateDataGrid()
+        private void UpdateDateTimeLabel(Label lbl, string value)
+        {
+            lbl.Text = value;
+        }
+
+        #region Current time label update tick
+        private void UpdateCurrentTimeTick(object o, System.Timers.ElapsedEventArgs e)
+        {
+            try
+            {
+                UpdateDTLabel upd = UpdateDateTimeLabel;
+                if (lbDateTimeNow.InvokeRequired)
+                    Invoke(upd, lbDateTimeNow, DateTime.Now.ToString());
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+
+        }
+        #endregion
+
+        #region Update Data Grid View by using Date Time range
+        public void UpdateDataGrid()
         {
             var startDate = DateTime.Now;
             var endDate = DateTime.Now;
@@ -146,48 +183,12 @@ namespace ToDoApp
                 endDate = dtpEndDate.Value.AddDays(1);
             }
 
-
-
             this.dgTable.Rows.Clear();
-            //this.dgTable.Rows.Add(3, "test", "34234234", 0);
-            //this.dgTable.Rows.Add(3, "dsfsdf", "34234234", 0);
-
-
-
-            using (var cont = new Data.AppDbContext())
-            {
-                //Data.Tables.Task tsk = cont.Tasks.Find(3);
-
-                //var filtereDdata 
-                var tasks = cont.Tasks.Where(task => task.StartDate >= startDate && task.StartDate < endDate);
-                //tasks += tasks.OrderBy(task => task.StartDate);
-
-                //var tasks = cont.Tasks; //Show all values
-                tasks = tasks.OrderBy(task => task.StartDate); //Sorting all tasks by date before showing it in Data Grid
-                foreach (var task in tasks)
-                    this.dgTable.Rows.Add(task.Id, task.Description, task.StartDate, task.IsDone);
-
-
-
-
-
-                //dgTable.DataSource = tasks;
-
-                //MessageBox.Show((cont.Tasks.OrderByDescending(u => u.Id).FirstOrDefault().ToString()), "",MessageBoxButtons.OK);
-                //MessageBox.Show(tsk.Description, "", MessageBoxButtons.OK);
-            }
-
-
 
             try
             {
-                using (var cont = new Data.AppDbContext())
-                {
-                    // var data = (from id in cont.Tasks select id);
-                    // dgTable.DataSource = data.ToList();
-
-
-                }
+                var filteredTasks = DbAccess.GetDisplayData(startDate, endDate);
+                foreach (var task in filteredTasks) this.dgTable.Rows.Add(task.Id, task.StartDate.ToString("dd.MM.yyyy HH:mm"), task.Description, task.IsDone, task.IsNotified);
 
             }
             catch (Exception ex)
@@ -195,7 +196,9 @@ namespace ToDoApp
                 MessageBox.Show(ex.Message);
             }
         }
+        #endregion
 
+        #region Update Data Grid View when pressing buttons
         private void MainForm_Load(object sender, EventArgs e)
         {
             UpdateDataGrid();
@@ -230,5 +233,6 @@ namespace ToDoApp
         {
             UpdateDataGrid();
         }
+        #endregion
     }
 }

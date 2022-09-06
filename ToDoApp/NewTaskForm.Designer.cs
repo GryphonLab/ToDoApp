@@ -35,7 +35,7 @@ namespace ToDoApp
             this.label2 = new System.Windows.Forms.Label();
             this.tbDescription = new System.Windows.Forms.TextBox();
             this.btnAddTask = new System.Windows.Forms.Button();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dtpNewTaskTime = new System.Windows.Forms.DateTimePicker();
             this.SuspendLayout();
             // 
             // btnCancel
@@ -50,16 +50,19 @@ namespace ToDoApp
             // 
             // dtpNewTaskDate
             // 
+            this.dtpNewTaskDate.CustomFormat = "dd.MM.yyyy";
+            this.dtpNewTaskDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.dtpNewTaskDate.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.dtpNewTaskDate.Location = new System.Drawing.Point(49, 22);
+            this.dtpNewTaskDate.Location = new System.Drawing.Point(97, 32);
             this.dtpNewTaskDate.Name = "dtpNewTaskDate";
-            this.dtpNewTaskDate.Size = new System.Drawing.Size(173, 20);
+            this.dtpNewTaskDate.Size = new System.Drawing.Size(91, 20);
             this.dtpNewTaskDate.TabIndex = 1;
+            this.dtpNewTaskDate.ValueChanged += new System.EventHandler(this.dtpNewTaskDate_ValueChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(141, 6);
+            this.label1.Location = new System.Drawing.Point(134, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(126, 13);
             this.label1.TabIndex = 2;
@@ -94,22 +97,23 @@ namespace ToDoApp
             this.btnAddTask.UseVisualStyleBackColor = true;
             this.btnAddTask.Click += new System.EventHandler(this.btnAddTask_Click);
             // 
-            // dateTimePicker1
+            // dtpNewTaskTime
             // 
-            this.dateTimePicker1.Format = System.Windows.Forms.DateTimePickerFormat.Time;
-            this.dateTimePicker1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.dateTimePicker1.Location = new System.Drawing.Point(246, 22);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.ShowUpDown = true;
-            this.dateTimePicker1.Size = new System.Drawing.Size(95, 20);
-            this.dateTimePicker1.TabIndex = 6;
+            this.dtpNewTaskTime.CustomFormat = "hh:mm";
+            this.dtpNewTaskTime.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
+            this.dtpNewTaskTime.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.dtpNewTaskTime.Location = new System.Drawing.Point(227, 32);
+            this.dtpNewTaskTime.Name = "dtpNewTaskTime";
+            this.dtpNewTaskTime.ShowUpDown = true;
+            this.dtpNewTaskTime.Size = new System.Drawing.Size(64, 20);
+            this.dtpNewTaskTime.TabIndex = 6;
             // 
             // NewTaskForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(389, 188);
-            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.dtpNewTaskTime);
             this.Controls.Add(this.btnAddTask);
             this.Controls.Add(this.tbDescription);
             this.Controls.Add(this.label2);
@@ -136,6 +140,6 @@ namespace ToDoApp
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox tbDescription;
         private System.Windows.Forms.Button btnAddTask;
-        public System.Windows.Forms.DateTimePicker dateTimePicker1;
+        public System.Windows.Forms.DateTimePicker dtpNewTaskTime;
     }
 }

@@ -25,50 +25,6 @@ namespace ToDoApp.Data
             base.OnModelCreating(modelBuilder);
         }
 
-        
-
         public DbSet<Tables.Task> Tasks { get; set; }
-
-        //public List<Tables>GetAll
-
-        public static void AddNewTask(string description, DateTime startTime)
-        {
-            try
-            {
-                using (var cont = new Data.AppDbContext())
-                {
-                    var task = new Data.Tables.Task { Description = description, StartDate = startTime };
-                    cont.Tasks.Add(task);
-                    cont.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error in adding the new task");
-            }
-        }
-
-        public static void DeleteTask(int id)
-        {
-            try
-            {
-                using (var cont = new Data.AppDbContext())
-                {
-                    var task = new Data.Tables.Task { Id = id };
-                    cont.Tasks.Attach(task);
-                    cont.Tasks.Remove(task);
-                    cont.SaveChanges();
-                }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception("Error in deleting of the task");
-            }
-        }
-
-        public static void GetDisplayData()
-        {
-
-        }
     }
 }

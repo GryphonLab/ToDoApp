@@ -22,6 +22,8 @@ namespace ToDoApp.Data.Tables
         public DateTime StartDate { get; set; } = DateTime.Now;
 
         public bool IsDone { get; set; } = false;
+
+        public bool IsNotified { get; set; } = false;
      
     }
 }

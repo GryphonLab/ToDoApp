@@ -13,9 +13,12 @@ namespace ToDoApp
 {
     public partial class NewTaskForm : Form
     {
-        public NewTaskForm()
+        private MainForm mainForm = null;
+
+        public NewTaskForm(Form callingForm)
         {
             InitializeComponent();
+            mainForm = callingForm as MainForm;
         }
 
         private void btnCancel_Click(object sender, EventArgs e)
@@ -31,8 +34,11 @@ namespace ToDoApp
 
         private void NewTaskForm_Load(object sender, EventArgs e)
         {
-            dtpNewTaskDate.CustomFormat = "dd.MM.yyy hh:mm:ss tt";
+            dtpNewTaskDate.CustomFormat = "dd.MM.yyyy";
             dtpNewTaskDate.Format = DateTimePickerFormat.Custom;
+
+            dtpNewTaskTime.CustomFormat = "HH:mm";
+            dtpNewTaskTime.Format = DateTimePickerFormat.Custom;
         }
 
         private void btnAddTask_Click(object sender, EventArgs e)
@@ -40,18 +46,25 @@ namespace ToDoApp
             if (tbDescription.Text.Length == 0) MessageBox.Show("Введите описание задачи", "Добавление новой задачи", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
             {
-                //Pack data and transfer to DB
+                DateTime newTaskDate = (dtpNewTaskDate.Value).Date.Add(dtpNewTaskTime.Value.TimeOfDay);
+                newTaskDate = newTaskDate.AddSeconds(-dtpNewTaskTime.Value.Second);
+                //Pack data and transfer to DB, then update Data Grid View
                 try
                 {
-                    AppDbContext.AddNewTask(tbDescription.Text, dtpNewTaskDate.Value);
+                    DbAccess.AddNewTask(tbDescription.Text, newTaskDate);
+                    this.mainForm.UpdateDataGrid();
                 }
                 catch(Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Ошибка добавления задачи", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
-                //this.MainForm.Update
                 this.Close();
             }   
+        }
+
+        private void dtpNewTaskDate_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
